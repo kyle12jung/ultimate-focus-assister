@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <title>Ultimate Focus Assister</title>
+</head>
 
 <body>
     <h1>Live streaming</h1>
-    <div>
-
+    <div class="video">
         <img src="{{ url_for('video_feed') }}" width="50%" />
     </div>
 
+    <h1 id="list"></h1>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='todoList.js') }}"></script>
 </body>
 
 
