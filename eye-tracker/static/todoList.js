@@ -36,7 +36,7 @@ function setAttributes(el, attrs) {
 }
 
 // dispatch is similar to setState (in react, onClick setState)
-addButton.addEventListener("click", (evt) => {
+addButton.addEventListener("click", () => {
     store.dispatch({ type: "ADD_TODO", payload: { value: userInput.value } });
 })
 
@@ -48,10 +48,10 @@ const toggleCheckbox = (text) => {
 // subscribe (sort of like useEffect)
 store.subscribe(() => {
     todos.innerHTML = null;
+    completed.innerHTML = null;
     userInput.value = "";
     store.getState().forEach((todo, i) => {
         const span = document.createElement('span');
-        todos.appendChild(span);
         setAttributes(span, { "class": "todo", "id": i });
         const checkBox = document.createElement("input");
         span.appendChild(checkBox);
@@ -60,5 +60,11 @@ store.subscribe(() => {
         todoText.innerText = todo.text;
         span.appendChild(todoText);
         checkBox.addEventListener("click", () => toggleCheckbox(todoText.innerText));
+        if (todo.completed) {
+            completed.appendChild(span);
+        } else {
+            todos.appendChild(span)
+        }
+
     })
 })
