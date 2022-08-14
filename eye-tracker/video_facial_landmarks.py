@@ -1,8 +1,10 @@
+from re import S
 import cv2 as cv
 import imutils
 from imutils.video import VideoStream
 from imutils import face_utils
 import datetime
+from stopwatch import Stopwatch
 import argparse
 import time
 import dlib
@@ -30,6 +32,9 @@ def gen_frame():
 	print("[INFO] camera sensor warming up...")
 	vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
 	time.sleep(2.0)
+
+	#initialize stopwatch
+	stopwatch = Stopwatch(2)
 	# loop over the frames from the video stream
 	while True:
 		# grab the frame from the threaded video stream, resize it to
@@ -40,7 +45,10 @@ def gen_frame():
 		gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 		# detect faces in the grayscale frame
 		rects = detector(gray, 0)
-
+		if len(rects): stopwatch.reset()
+		else: stopwatch.start()
+		print(stopwatch.duration)
+		if stopwatch.duration > 10.0: break
 		# loop over the face detections
 		for rect in rects:
 			# determine the facial landmarks for the face region, then
@@ -51,8 +59,8 @@ def gen_frame():
 			# loop over the (x, y)-coordinates for the facial landmarks
 			# and draw them on the image
 			for (x, y) in shape:
-				cv.circle(frame, (x, y), 1, (0, 0, 255), -1)
-		
+				circle = cv.circle(frame, (x, y), 1, (0, 0, 255), -1)
+
 		# # show the frame
 		# cv.imshow("Frame", frame)
 		# key = cv.waitKey(1) & 0xFF

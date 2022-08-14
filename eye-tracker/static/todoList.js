@@ -20,6 +20,8 @@ const reducer = (state = [], action) => {
             })
     }
 }
+
+// Store
 const store = Redux.createStore(reducer);
 
 // Elements
