@@ -5,12 +5,15 @@ from imutils.video import VideoStream
 from imutils import face_utils
 import datetime
 from stopwatch import Stopwatch
+from playsound import playsound
 import argparse
 import time
 import dlib
 from flask import Flask, render_template, Response
 
 app = Flask(__name__)
+
+FOCUS = True
 
 def gen_frame():
 	# construct the argument parse and parse the arguments
@@ -32,7 +35,8 @@ def gen_frame():
 	print("[INFO] camera sensor warming up...")
 	vs = VideoStream(usePiCamera=args["picamera"] > 0).start()
 	time.sleep(2.0)
-
+	def alarm():
+		playsound('assets/alarm.wav')
 	#initialize stopwatch
 	stopwatch = Stopwatch(2)
 	# loop over the frames from the video stream
@@ -48,7 +52,8 @@ def gen_frame():
 		if len(rects): stopwatch.reset()
 		else: stopwatch.start()
 		print(stopwatch.duration)
-		if stopwatch.duration > 10.0: break
+		if stopwatch.duration > 10.0: 
+			alarm()
 		# loop over the face detections
 		for rect in rects:
 			# determine the facial landmarks for the face region, then
@@ -80,7 +85,7 @@ def gen_frame():
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', data=FOCUS)
 
 @app.route('/video_feed')
 def video_feed():

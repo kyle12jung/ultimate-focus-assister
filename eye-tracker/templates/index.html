@@ -12,6 +12,13 @@
             <img src="{{ url_for('video_feed') }}" width="50%" />
         </div>
     </section>
+    <section class="focus">
+        {% if data %}
+        <h1>Focusing</h1>
+        {% else %}
+        <h1>You're not focusing! FOCUS!</h1>
+        {% endif %}
+    </section>
     <section class="todo-list">
         <h1>Todo List</h1>
         <span class="add-todo">
@@ -20,10 +27,8 @@
         </span>
         <div class="list">
             <div class="todos">
-
             </div>
             <div class="completed">
-
             </div>
         </div>
     </section>
